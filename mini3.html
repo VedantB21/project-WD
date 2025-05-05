@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Quality Improvement Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #f39c12;
+            --dark-color: #34495e;
+            --light-color: #ecf0f1;
+            --danger-color: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-weight: 300;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .metric {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .metric-label {
+            font-size: 1rem;
+            color: #666;
+        }
+        
+        .trend {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        
+        .trend.up {
+            color: var(--secondary-color);
+        }
+        
+        .trend.down {
+            color: var(--danger-color);
+        }
+        
+        .chart-container {
+            height: 200px;
+            margin-top: 1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #bdc3c7;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .feedback-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .rating-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .rating-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .rating-btn:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .rating-btn.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        #improvement-ideas {
+            display: none;
+        }
+        
+        .idea-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .idea-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .votes {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+            color: #666;
+        }
+        
+        .vote-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+        
+        .vote-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Educational Quality Improvement Dashboard</h1>
+        <p class="subtitle">Continuous Monitoring & Enhancement of Teaching Methods</p>
+    </header>
+    
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="dashboard">Dashboard</div>
+            <div class="tab" data-tab="feedback">Provide Feedback</div>
+            <div class="tab" data-tab="improvement-ideas">Improvement Ideas</div>
+        </div>
+        
+        <div id="dashboard" class="tab-content">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">Student Satisfaction</div>
+                    <div class="card-body">
+                        <div class="metric">
+                            <div class="metric-value">87%</div>
+                            <div class="metric-label">Overall Satisfaction</div>
+                        </div>
+                        <div class="trend up">
+                            <span>↑ 5% from last semester</span>
+                        </div>
+                        <div class="chart-container" id="satisfaction-chart"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Learning Outcomes</div>
+                    <div class="card-body">
+                        <div class="metric">
+                            <div class="metric-value">92%</div>
+                            <div class="metric-label">Achievement Rate</div>
+                        </div>
+                        <div class="trend up">
+                            <span>↑ 3% from last semester</span>
+                        </div>
+                        <div class="chart-container" id="outcomes-chart"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Teaching Method Efficacy</div>
+                    <div class="card-body">
+                        <div class="metric">
+                            <div class="metric-value">4.6</div>
+                            <div class="metric-label">Average Rating (out of 5)</div>
+                        </div>
+                        <div class="trend up">
+                            <span>↑ 0.3 points from last semester</span>
+                        </div>
+                        <div class="chart-container" id="methods-chart"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Course Materials Quality</div>
+                    <div class="card-body">
+                        <div class="metric">
+                            <div class="metric-value">4.8</div>
+                            <div class="metric-label">Average Rating (out of 5)</div>
+                        </div>
+                        <div class="trend up">
+                            <span>↑ 0.2 points from last semester</span>
+                        </div>
+                        <div class="chart-container" id="materials-chart"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">Improvement Areas</div>
+                <div class="card-body">
+                    <div id="improvement-areas-chart" style="height: 300px;"></div>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary">View Detailed Report</button>
+                        <button class="btn btn-secondary">Download Data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="feedback" class="tab-content" style="display: none;">
+            <div class="feedback-form">
+                <h2>Share Your Feedback</h2>
+                <p>Help us improve our teaching methods and course delivery</p>
+                
+                <form id="teaching-feedback">
+                    <div class="form-group">
+                        <label for="course">Course</label>
+                        <select id="course" required>
+                            <option value="">Select a course</option>
+                            <option value="cs101">CS101: Introduction to Programming</option>
+                            <option value="cs201">CS201: Data Structures</option>
+                            <option value="cs301">CS301: Algorithms</option>
+                            <option value="cs401">CS401: Software Engineering</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Teaching Method Effectiveness (1-5)</label>
+                        <div class="rating-container">
+                            <button type="button" class="rating-btn" data-value="1">1</button>
+                            <button type="button" class="rating-btn" data-value="2">2</button>
+                            <button type="button" class="rating-btn" data-value="3">3</button>
+                            <button type="button" class="rating-btn" data-value="4">4</button>
+                            <button type="button" class="rating-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Course Materials Quality (1-5)</label>
+                        <div class="rating-container">
+                            <button type="button" class="rating-btn" data-value="1">1</button>
+                            <button type="button" class="rating-btn" data-value="2">2</button>
+                            <button type="button" class="rating-btn" data-value="3">3</button>
+                            <button type="button" class="rating-btn" data-value="4">4</button>
+                            <button type="button" class="rating-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="strengths">What worked well in this course?</label>
+                        <textarea id="strengths" placeholder="Please share what you found most helpful..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="improvements">What could be improved?</label>
+                        <textarea id="improvements" placeholder="Please share suggestions for improvement..."></textarea>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                        <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div id="improvement-ideas" class="tab-content">
+            <h2>Community Improvement Ideas</h2>
+            <p>Vote and comment on ideas to enhance our educational quality</p>
+            
+            <div class="idea-card">
+                <div class="idea-title">Interactive Learning Activities</div>
+                <p>Incorporate more hands-on, interactive learning activities into all courses to engage students with different learning styles.</p>
+                <div class="votes">
+                    <button class="vote-btn">↑</button>
+                    <span>42 votes</span>
+                </div>
+            </div>
+            
+            <div class="idea-card">
+                <div class="idea-title">Real-time Feedback System</div>
+                <p>Implement a system where students can provide immediate feedback during classes to adjust teaching pace and clarify concepts in real-time.</p>
+                <div class="votes">
+                    <button class="vote-btn">↑</button>
+                    <span>37 votes</span>
+                </div>
+            </div>
+            
+            <div class="idea-card">
+                <div class="idea-title">Peer Teaching Opportunities</div>
+                <p>Create structured opportunities for students to teach and explain concepts to peers, reinforcing their own understanding.</p>
+                <div class="votes">
+                    <button class="vote-btn">↑</button>
+                    <span>29 votes</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="add-idea-btn">Add Your Idea</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                
+                // Show the selected tab content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).style.display = 'block';
+                
+                // Update active tab styling
+                document.querySelectorAll('.tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                tab.classList.add('active');
+            });
+        });
+        
+        // Rating buttons functionality
+        document.querySelectorAll('.rating-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove selection from sibling buttons
+                const container = btn.closest('.rating-container');
+                container.querySelectorAll('.rating-btn').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Select the clicked button
+                btn.classList.add('selected');
+            });
+        });
+        
+        // Simulate chart data
+        function initCharts() {
+            // This is a simplified simulation of charts
+            // In a real application, you would use a charting library like Chart.js
+            
+            const chartContainers = document.querySelectorAll('.chart-container');
+            chartContainers.forEach(container => {
+                // Create a simple canvas-based visualization
+                const canvas = document.createElement('canvas');
+                canvas.width = container.clientWidth;
+                canvas.height = container.clientHeight;
+                container.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Draw a simple bar or line chart simulation
+                ctx.fillStyle = '#3498db';
+                
+                // Different patterns for different charts
+                if (container.id === 'satisfaction-chart') {
+                    // Simulate an increasing trend
+                    for (let i = 0; i < 5; i++) {
+                        const height = 30 + i * 15;
+                        ctx.fillRect(40 + i * 50, canvas.height - height, 30, height);
+                    }
+                } else if (container.id === 'outcomes-chart') {
+                    // Simulate a slightly different pattern
+                    for (let i = 0; i < 5; i++) {
+                        const height = 70 + Math.sin(i) * 20;
+                        ctx.fillRect(40 + i * 50, canvas.height - height, 30, height);
+                    }
+                } else {
+                    // Default pattern
+                    for (let i = 0; i < 5; i++) {
+                        const height = 50 + Math.random() * 50;
+                        ctx.fillRect(40 + i * 50, canvas.height - height, 30, height);
+                    }
+                }
+                
+                // Add x-axis labels
+                ctx.fillStyle = '#666';
+                ctx.font = '12px Arial';
+                for (let i = 0; i < 5; i++) {
+                    ctx.fillText(`Q${i+1}`, 45 + i * 50, canvas.height - 5);
+                }
+            });
+            
+            // Create the improvement areas chart
+            const improvementChart = document.getElementById('improvement-areas-chart');
+            const canvas = document.createElement('canvas');
+            canvas.width = improvementChart.clientWidth;
+            canvas.height = improvementChart.clientHeight;
+            improvementChart.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Define areas and their scores
+            const areas = [
+                { name: 'Interactive Content', score: 75 },
+                { name: 'Assessment Methods', score: 68 },
+                { name: 'Group Activities', score: 82 },
+                { name: 'Feedback Timeliness', score: 65 },
+                { name: 'Technology Integration', score: 70 }
+            ];
+            
+            // Draw horizontal bars
+            const barHeight = 40;
+            const gap = 20;
+            const maxScore = 100;
+            
+            areas.forEach((area, index) => {
+                const y = index * (barHeight + gap) + 30;
+                const width = (area.score / maxScore) * (canvas.width - 200);
+                
+                // Bar background
+                ctx.fillStyle = '#ecf0f1';
+                ctx.fillRect(150, y, canvas.width - 200, barHeight);
+                
+                // Actual score bar
+                ctx.fillStyle = getColorForScore(area.score);
+                ctx.fillRect(150, y, width, barHeight);
+                
+                // Label
+                ctx.fillStyle = '#333';
+                ctx.font = '14px Arial';
+                ctx.fillText(area.name, 0, y + barHeight/2 + 5);
+                
+                // Score text
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 14px Arial';
+                ctx.fillText(`${area.score}%`, width + 160, y + barHeight/2 + 5);
+            });
+        }
+        
+        function getColorForScore(score) {
+            if (score >= 80) return '#2ecc71'; // Green for high scores
+            if (score >= 70) return '#3498db'; // Blue for good scores
+            if (score >= 60) return '#f39c12'; // Orange for average scores
+            return '#e74c3c'; // Red for low scores
+        }
+        
+        // Form submission handling
+        document.getElementById('teaching-feedback').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const course = document.getElementById('course').value;
+            const strengths = document.getElementById('strengths').value;
+            const improvements = document.getElementById('improvements').value;
+            
+            // Get selected ratings
+            let teachingRating = 0;
+            let materialsRating = 0;
+            
+            document.querySelectorAll('.rating-container').forEach((container, index) => {
+                const selectedBtn = container.querySelector('.selected');
+                if (selectedBtn) {
+                    if (index === 0) teachingRating = selectedBtn.getAttribute('data-value');
+                    if (index === 1) materialsRating = selectedBtn.getAttribute('data-value');
+                }
+            });
+            
+            // In a real application, you would send this data to a server
+            alert('Thank you for your feedback! Your input helps us improve our teaching quality.');
+            
+            // Reset the form
+            this.reset();
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+        });
+        
+        // Add idea button functionality
+        document.getElementById('add-idea-btn').addEventListener('click', function() {
+            const ideaTitle = prompt('What is the title of your improvement idea?');
+            if (!ideaTitle) return;
+            
+            const ideaDescription = prompt('Please describe your idea in detail:');
+            if (!ideaDescription) return;
+            
+            // Create a new idea card
+            const ideaCard = document.createElement('div');
+            ideaCard.className = 'idea-card';
+            
+            ideaCard.innerHTML = `
+                <div class="idea-title">${ideaTitle}</div>
+                <p>${ideaDescription}</p>
+                <div class="votes">
+                    <button class="vote-btn">↑</button>
+                    <span>1 vote</span>
+                </div>
+            `;
+            
+            // Add the new card to the list (before the button)
+            const addButton = document.getElementById('add-idea-btn');
+            addButton.parentNode.parentNode.insertBefore(ideaCard, addButton.parentNode);
+            
+            // Setup the vote button
+            const voteBtn = ideaCard.querySelector('.vote-btn');
+            voteBtn.addEventListener('click', function() {
+                const voteSpan = this.nextElementSibling;
+                const currentVotes = parseInt(voteSpan.textContent);
+                voteSpan.textContent = `${currentVotes + 1} votes`;
+                this.disabled = true;
+                this.style.color = '#3498db';
+            });
+        });
+        
+        // Initialize the page
+        window.addEventListener('load', function() {
+            // Show dashboard tab by default
+            document.getElementById('dashboard').style.display = 'block';
+            
+            // Initialize charts
+            initCharts();
+            
+            // Setup vote buttons
+            document.querySelectorAll('.vote-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const voteSpan = this.nextElementSibling;
+                    const currentVotes = parseInt(voteSpan.textContent);
+                    voteSpan.textContent = `${currentVotes + 1} votes`;
+                    this.disabled = true;
+                    this.style.color = '#3498db';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

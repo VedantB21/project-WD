@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Student Feedback System</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #f5f7fa;
+            --gray-color: #95a5a6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ecf0f1;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--gray-color);
+        }
+
+        .privacy-notice {
+            background-color: #e8f4fd;
+            padding: 1rem;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .privacy-notice h3 {
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .privacy-notice p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .rating-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .rating-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .rating-item h4 {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .stars {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .stars input[type="radio"] {
+            display: none;
+        }
+
+        .stars label {
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #ddd;
+            transition: color 0.2s;
+        }
+
+        .stars label:hover,
+        .stars label:hover ~ label,
+        .stars input[type="radio"]:checked ~ label {
+            color: #ffd700;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .success-message, .error-message {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 1.5rem;
+                margin: 1rem auto;
+            }
+
+            .stars label {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 100%;
+                border-radius: 0;
+                box-shadow: none;
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1.2rem;
+            }
+
+            .stars label {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Anonymous Student Feedback</h1>
+            <p>Your honest feedback helps improve teaching quality</p>
+        </div>
+
+        <div class="privacy-notice">
+            <h3>Confidentiality Assurance</h3>
+            <p>This feedback system is completely anonymous. We do not collect or store any personal information such as your name, ID, email, or IP address. Your feedback cannot be traced back to you, ensuring you can provide honest opinions without concerns.</p>
+        </div>
+
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label for="department">Department</label>
+                <select id="department" required>
+                    <option value="">Select Department</option>
+                    <option value="Computer Science">Computer Science</option>
+                 
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="department">Section</label>
+                <select id="department" required>
+                    <option value="">Select Section</option>
+                    <option value="Computer Science">A1</option>
+                    <option value="Computer Science">A2</option>
+                    <option value="Computer Science">A3</option>
+                 
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="teacher">Teacher</label>
+                <select id="teacher" required>
+                    <option value="">Select Teacher</option>
+                    <!-- Teacher options will be populated based on department selection -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <select id="subject" required>
+                    <option value="">Select Subject</option>
+                    <!-- Subject options will be populated based on department and teacher selection -->
+                </select>
+            </div>
+
+            <div class="form-group rating-container">
+                <label>Rate the following aspects:</label>
+                
+                <div class="rating-item">
+                    <h4>Teaching Effectiveness</h4>
+                    <div class="stars" id="teachingStars">
+                        <input type="radio" id="teaching5" name="teaching" value="1" required>
+                        <label for="teaching5">★</label>
+                        <input type="radio" id="teaching4" name="teaching" value="2">
+                        <label for="teaching4">★</label>
+                        <input type="radio" id="teaching3" name="teaching" value="3">
+                        <label for="teaching3">★</label>
+                        <input type="radio" id="teaching2" name="teaching" value="4">
+                        <label for="teaching2">★</label>
+                        <input type="radio" id="teaching1" name="teaching" value="5">
+                        <label for="teaching1">★</label>
+                    </div>
+                </div>
+
+                <div class="rating-item">
+                    <h4>Subject Content Quality</h4>
+                    <div class="stars" id="contentStars">
+                        <input type="radio" id="content5" name="content" value="5" required>
+                        <label for="content5">★</label>
+                        <input type="radio" id="content4" name="content" value="4">
+                        <label for="content4">★</label>
+                        <input type="radio" id="content3" name="content" value="3">
+                        <label for="content3">★</label>
+                        <input type="radio" id="content2" name="content" value="2">
+                        <label for="content2">★</label>
+                        <input type="radio" id="content1" name="content" value="1">
+                        <label for="content1">★</label>
+                    </div>
+                </div>
+
+                <div class="rating-item">
+                    <h4>Communication Skills</h4>
+                    <div class="stars" id="communicationStars">
+                        <input type="radio" id="communication5" name="communication" value="5" required>
+                        <label for="communication5">★</label>
+                        <input type="radio" id="communication4" name="communication" value="4">
+                        <label for="communication4">★</label>
+                        <input type="radio" id="communication3" name="communication" value="3">
+                        <label for="communication3">★</label>
+                        <input type="radio" id="communication2" name="communication" value="2">
+                        <label for="communication2">★</label>
+                        <input type="radio" id="communication1" name="communication" value="1">
+                        <label for="communication1">★</label>
+                    </div>
+                </div>
+
+                <div class="rating-item">
+                    <h4>Responsiveness to Questions</h4>
+                    <div class="stars" id="responsivenessStars">
+                        <input type="radio" id="responsiveness5" name="responsiveness" value="5" required>
+                        <label for="responsiveness5">★</label>
+                        <input type="radio" id="responsiveness4" name="responsiveness" value="4">
+                        <label for="responsiveness4">★</label>
+                        <input type="radio" id="responsiveness3" name="responsiveness" value="3">
+                        <label for="responsiveness3">★</label>
+                        <input type="radio" id="responsiveness2" name="responsiveness" value="2">
+                        <label for="responsiveness2">★</label>
+                        <input type="radio" id="responsiveness1" name="responsiveness" value="1">
+                        <label for="responsiveness1">★</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="comments">Additional Comments (Optional)</label>
+                <textarea id="comments" placeholder="Please provide any additional feedback or suggestions..."></textarea>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">Submit Anonymous Feedback</button>
+        </form>
+
+        <div class="success-message" id="successMessage">
+            Your feedback has been submitted successfully. Thank you for helping improve our educational quality!
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            There was an error submitting your feedback. Please try again.
+        </div>
+    </div>
+
+    <script>
+        // Sample data for demonstration
+        const departmentData = {
+            "Computer Science": {
+                teachers: ["Dr. S. A. Khapre", "Prof. M. K. Nichat", "Dr. N. R. Thakare", "Prof. A. P. Pundkar", "Dr. A. D. Raut", "Dr. V. B. Kute"],
+                subjects: {
+                    "Dr. S. A. Khapre": ["Mathematics - II"],
+                    "Prof. M. K. Nichat": ["Digital Electronics"],
+                    "Dr. N. R. Thakare": ["Quantum Physics"],
+                    "Prof. A. P. Pundkar": ["Indian knowledge system"],
+                    "Dr. A. D. Raut": ["Object oriented programming"],
+                    "Dr. V. B. Kute": ["Computer fundamental"]
+                }
+            },
+           
+        };
+
+        // Update teacher options based on department selection
+        document.getElementById('department').addEventListener('change', function() {
+            const departmentValue = this.value;
+            const teacherSelect = document.getElementById('teacher');
+            teacherSelect.innerHTML = '<option value="">Select Teacher</option>';
+            document.getElementById('subject').innerHTML = '<option value="">Select Subject</option>';
+            
+            if (departmentValue && departmentData[departmentValue]) {
+                const teachers = departmentData[departmentValue].teachers;
+                teachers.forEach(teacher => {
+                    const option = document.createElement('option');
+                    option.value = teacher;
+                    option.textContent = teacher;
+                    teacherSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Update subject options based on teacher selection
+        document.getElementById('teacher').addEventListener('change', function() {
+            const departmentValue = document.getElementById('department').value;
+            const teacherValue = this.value;
+            const subjectSelect = document.getElementById('subject');
+            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+            
+            if (departmentValue && teacherValue && departmentData[departmentValue] && 
+                departmentData[departmentValue].subjects[teacherValue]) {
+                const subjects = departmentData[departmentValue].subjects[teacherValue];
+                subjects.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject;
+                    option.textContent = subject;
+                    subjectSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Fix the star rating system to work correctly
+        document.querySelectorAll('.stars').forEach(starGroup => {
+            const labels = starGroup.querySelectorAll('label');
+            
+            labels.forEach(label => {
+                label.addEventListener('click', function() {
+                    // Reset all stars
+                    labels.forEach(l => l.style.color = '#ddd');
+                    
+                    // Color the selected star and all stars to its right
+                    let current = this;
+                    while (current) {
+                        current.style.color = '#ffd700';
+                        current = current.previousElementSibling?.previousElementSibling?.tagName === 'LABEL' ? 
+                                 current.previousElementSibling.previousElementSibling : null;
+                    }
+                });
+            });
+        });
+
+        // Form submission
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Client-side validation
+            const department = document.getElementById('department').value;
+            const teacher = document.getElementById('teacher').value;
+            const subject = document.getElementById('subject').value;
+            const teachingRating = document.querySelector('input[name="teaching"]:checked')?.value;
+            const contentRating = document.querySelector('input[name="content"]:checked')?.value;
+            const communicationRating = document.querySelector('input[name="communication"]:checked')?.value;
+            const responsivenessRating = document.querySelector('input[name="responsiveness"]:checked')?.value;
+            const comments = document.getElementById('comments').value;
+            
+            if (!department || !teacher || !subject || !teachingRating || !contentRating || !communicationRating || !responsivenessRating) {
+                document.getElementById('errorMessage').textContent = 'Please fill in all required fields.';
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'none';
+                return;
+            }
+            
+            // Prepare the feedback data (no personal information included)
+            const feedbackData = {
+                department,
+                teacher,
+                subject,
+                ratings: {
+                    teaching: teachingRating,
+                    content: contentRating,
+                    communication: communicationRating,
+                    responsiveness: responsivenessRating
+                },
+                comments,
+                timestamp: new Date().toISOString().split('T')[0] // Just the date, no time for additional anonymity
+            };
+            
+            // In a real application, this would be sent to a server
+            console.log('Anonymous Feedback Submitted:', feedbackData);
+            
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Reset the form
+            this.reset();
+            
+            // Reset all star ratings
+            document.querySelectorAll('.stars label').forEach(label => {
+                label.style.color = '#ddd';
+            });
+            
+            // Reset dropdowns for subjects and teachers
+            document.getElementById('teacher').innerHTML = '<option value="">Select Teacher</option>';
+            document.getElementById('subject').innerHTML = '<option value="">Select Subject</option>';
+
+            // Hide the success message after 5 seconds
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

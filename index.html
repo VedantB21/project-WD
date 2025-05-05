@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Feedback System</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --accent: #560bad;
+        }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            body {
+                background-color: #f5f5f5;
+                overflow-x: hidden;
+            }
+
+            .container {
+                display: flex;
+                min-height: 100vh;
+                overflow: hidden;
+            }
+
+            .left-panel {
+                /* background-color: #F5A425; */
+                background: linear-gradient(150deg, var(--primary-light), var(--secondary));
+                width: 55%;
+                padding: 40px;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                color: white;
+                overflow: hidden;
+            }
+
+            .left-panel::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: -100px;
+                height: 100%;
+                width: 200px;
+                background-color: #f5f5f5;
+                transform: skewX(-10deg);
+            }
+
+            .college-name {
+                text-align: center;
+                margin-bottom: 20px;
+                z-index: 10;
+            }
+
+            .college-name h1 {
+                font-size: 28px;
+                margin-bottom: 5px;
+            }
+
+            .new-reg-btn {
+                background-color: transparent;
+                border: 2px solid white;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                text-decoration: none;
+                font-weight: bold;
+                text-transform: uppercase;
+                font-size: 14px;
+                margin-bottom: 40px;
+                z-index: 10;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .new-reg-btn:hover {
+                background-color: #560bad;
+                /* color: #F5A425; */
+                color: linear-gradient(150deg, var(--primary-light), var(--secondary));;
+            }
+
+            .illustration {
+                width: 85%;
+                max-width: 450px;
+                z-index: 10;
+                margin-top: 20px;
+            }
+
+            .illustration img {
+                width: 100%;
+                height: auto;
+            }
+
+            .right-panel {
+                width: 45%;
+                padding: 40px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .login-container {
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .login-header {
+                text-align: center;
+                margin-bottom: 40px;
+            }
+
+            .login-header h2 {
+                font-size: 36px;
+                color: #333;
+                margin-bottom: 10px;
+            }
+
+            .login-form {
+                margin-bottom: 20px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+                position: relative;
+            }
+
+            .form-group i {
+                position: absolute;
+                left: 15px;
+                top: 15px;
+                color: #999;
+            }
+
+            .form-control {
+                width: 100%;
+                padding: 12px 15px 12px 45px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 16px;
+                color: #333;
+                background-color: #f9f9f9;
+            }
+
+            .form-control:focus {
+                outline: none;
+                /* border-color: #F5A425; */
+                border-color: linear-gradient(150deg, var(--primary-light), var(--secondary));;
+                box-shadow: 0 0 5px rgba(245, 164, 37, 0.3);
+            }
+
+            .forgot-password {
+                text-align: right;
+                margin-bottom: 25px;
+            }
+
+            .forgot-password a {
+                color: #333;
+                text-decoration: none;
+                font-size: 14px;
+            }
+
+            .forgot-password a:hover {
+                color: #560bad;
+                text-decoration: underline;
+            }
+
+            .btn-login {
+                width: 100%;
+                background-color:  #3f37c9;;
+                color: white;
+                border: none;
+                padding: 12px;
+                border-radius: 5px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .btn-login:hover {
+                background-color:  #560bad;
+            }
+
+            .login-type {
+                display: flex;
+                justify-content: center;
+                margin: 20px 0;
+            }
+
+            .login-type-btn {
+                padding: 10px 20px;
+                margin: 0 10px;
+                background-color: transparent;
+                border: 2px solid #4895ef;
+                color: #4361ee;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: all 0.3s ease;
+            }
+
+            .login-type-btn.active {
+                background-color: #4895ef;
+                color: white;
+            }
+
+            .login-type-btn:hover:not(.active) {
+                background-color: #fcf0dc;
+            }
+
+            .branding {
+                display: flex;
+                justify-content: center;
+                margin-top: 40px;
+            }
+
+            .branding img {
+                height: 40px;
+            }
+
+            .feedback-info {
+                text-align: center;
+                font-size: 14px;
+                color: #666;
+                margin-top: 20px;
+                padding: '10px';
+            }
+
+            .feedback-info-text {
+                margin-bottom: 5px;
+                color: #4361ee;
+                font-weight: bold;
+            }
+
+            @media (max-width: 992px) {
+                .container {
+                    flex-direction: column;
+                }
+
+                .left-panel {
+                    width: 100%;
+                    padding: 30px;
+                }
+
+                .left-panel::after {
+                    display: none;
+                }
+
+                .right-panel {
+                    width: 100%;
+                    padding: 30px;
+                }
+
+                .college-name h1 {
+                    font-size: 24px;
+                }
+
+                .illustration {
+                    width: 70%;
+                    margin-top: 10px;
+                    margin-bottom: 20px;
+                }
+            }
+            
+            /* Added for notifications */
+            .notification {
+                padding: 10px;
+                margin-bottom: 15px;
+                border-radius: 5px;
+                text-align: center;
+                display: none;
+            }
+            
+            .success {
+                background-color: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+            }
+            
+            .error {
+                background-color: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="college-name">
+                <h1>P. R. Pote Patil Collage of Engineering and Management</h1>
+                <h2>Student Feedback System</h2>
+                <p>Anonymous Evaluation Platform</p>
+            </div>
+
+            <!-- <button class="new-reg-btn" id="registerBtn">NEW STUDENT REGISTRATION</button> -->
+
+            <div class="illustration">
+                <img src="logo.png" alt="Feedback Illustration">
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="login-container">
+                <div class="login-header">
+                    <h2>Login</h2>
+                </div>
+
+                <div class="login-type">
+                    <button class="login-type-btn active" id="studentBtn">Student</button>
+                    <button class="login-type-btn" id="teacherBtn">Teacher</button>
+                </div>
+                
+                <div id="notification" class="notification"></div>
+
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <i>👤</i>
+                        <input type="text" class="form-control" id="username" placeholder="Username / Registration No"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <i>🔒</i>
+                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                    </div>
+
+                    <div class="forgot-password">
+                        <a href="#" id="forgotPasswordLink">Forgot Password? Click Here</a>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="loginButton">LOGIN</button>
+                </form>
+
+                <div class="feedback-info">
+                    <p class="feedback-info-text">Your Feedback Matters</p>
+                    <p>All feedback submissions are completely anonymous to ensure honest and unbiased evaluations</p>
+                </div>
+
+                <div class="branding">
+                    <!-- <img src="/api/placeholder/200/50" alt="Feedback System Logo"> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="theme-switch">
+            Change Theme
+            <label class="switch">
+                <input type="checkbox" id="themeToggle">
+                <span class="slider"></span>
+            </label>
+        </div> -->
+    </div>
+
+    <script>
+        // Database simulation
+        const DATABASE = {
+            users: {
+                teacher: {
+                    username: 'bvkasar',
+                    password: 'teacher123',
+                    name: 'Prof. B.V. Kasar',
+                    role: 'teacher'
+                },
+                students: [
+                    {id: 1, rollNo: '01', name: 'Aarya Sonar', username: 'aarya', password: 'student123'},
+                    {id: 2, rollNo: '02', name: 'Abhishek Jadhav', username: 'abhishekj', password: 'student123'},
+                    {id: 3, rollNo: '03', name: 'Abhishek Vakhare', username: 'abhishekv', password: 'student123'},
+                    {id: 4, rollNo: '04', name: 'Aryan Bhende', username: 'aryan', password: 'student123'},
+                    {id: 5, rollNo: '05', name: 'Ayush Joshi', username: 'ayush', password: 'student123'},
+                    {id: 6, rollNo: '06', name: 'Bhavesh Keche', username: 'bhavesh', password: 'student123'},
+                    {id: 7, rollNo: '07', name: 'Gaurav Chavhan', username: 'gaurav', password: 'student123'},
+                    {id: 8, rollNo: '08', name: 'Harshal Farkade', username: 'harshal', password: 'student123'},
+                    {id: 9, rollNo: '09', name: 'Kartik Kale', username: 'kartik', password: 'student123'},
+                    {id: 10, rollNo: '10', name: 'Rohan kazi', username: 'rohan', password: 'student123'},
+                    {id: 11, rollNo: '11', name: 'Lokesh Ghurde', username: 'lokesh', password: 'student123'},
+                    {id: 12, rollNo: '12', name: 'Mandar Hade', username: 'mandar', password: 'student123'},
+                    {id: 13, rollNo: '13', name: 'Mann Gawande', username: 'mann', password: 'student123'},
+                    {id: 14, rollNo: '14', name: 'Mohd. Talha', username: 'talha', password: 'student123'},
+                    {id: 15, rollNo: '15', name: 'Nayan Gawande', username: 'nayan', password: 'student123'},
+                    {id: 16, rollNo: '16', name: 'Nikhil Sawale', username: 'nikhil', password: 'student123'},
+                    {id: 17, rollNo: '17', name: 'Muhafiz khan Pathan', username: 'muhafiz', password: 'student123'},
+                    {id: 18, rollNo: '18', name: 'Pranav Bhagat', username: 'pranavb', password: 'student123'},
+                    {id: 19, rollNo: '19', name: 'Pranav Parmale', username: 'pranavp', password: 'student123'},
+                    {id: 20, rollNo: '20', name: 'Pranav Patil', username: 'pranavpa', password: 'student123'},
+                    {id: 21, rollNo: '21', name: 'Pranay More', username: 'pranay', password: 'student123'},
+                    {id: 22, rollNo: '22', name: 'Pranit Bawane', username: 'pranit', password: 'student123'},
+                    {id: 23, rollNo: '23', name: 'Pruthviraj Deshmukh', username: 'pruthviraj', password: 'student123'},
+                    {id: 24, rollNo: '24', name: 'Purvesh Wankhade', username: 'purvesh', password: 'student123'},
+                    {id: 25, rollNo: '25', name: 'Hrushikesh Dhawale', username: 'hrushikesh', password: 'student123'},
+                    {id: 26, rollNo: '26', name: 'Rushikesh Mangate', username: 'rushikesh', password: 'student123'},
+                    {id: 27, rollNo: '27', name: 'Sanchit Raut', username: 'sanchit', password: 'student123'},
+                    {id: 28, rollNo: '28', name: 'Sanskar Pawar', username: 'sanskar', password: 'student123'},
+                    {id: 29, rollNo: '29', name: 'Sarthak Dhote', username: 'sarthak', password: 'student123'},
+                    {id: 30, rollNo: '30', name: 'Shreyash Dakhole', username: 'shreyash', password: 'student123'},
+                    {id: 31, rollNo: '31', name: 'Sujal Kalbande', username: 'sujal', password: 'student123'},
+                    {id: 32, rollNo: '32', name: 'Tilak Saraiyya', username: 'tilak', password: 'student123'},
+                    {id: 33, rollNo: '33', name: 'Vansh Hedaoo', username: 'vansh', password: 'student123'},
+                    {id: 34, rollNo: '34', name: 'Vedant Bhusari', username: 'vedant', password: 'student123'}
+                ]
+            },
+            attendance: [],
+            generateSampleAttendance() {
+                // Generate sample attendance data for the past month
+                const subjects = ['programming', 'database', 'networks', 'algorithms'];
+                const today = new Date();
+                
+                // Go back 30 days
+                for (let i = 30; i >= 1; i--) {
+                    const date = new Date();
+                    date.setDate(today.getDate() - i);
+                    
+                    // Skip weekends
+                    if (date.getDay() === 0 || date.getDay() === 6) continue;
+                    
+                    // For each subject, create attendance records
+                    subjects.forEach(subject => {
+                        // Not every subject has a class every day
+                        if (Math.random() > 0.7) return;
+                        
+                        const record = {
+                            date: date.toISOString().split('T')[0],
+                            subject: subject,
+                            students: []
+                        };
+                        
+                        // For each student, mark attendance
+                        DATABASE.users.students.forEach(student => {
+                            record.students.push({
+                                studentId: student.id,
+                                present: Math.random() > 0.2 // 80% chance of being present
+                            });
+                        });
+                        
+                        DATABASE.attendance.push(record);
+                    });
+                }
+            }
+        };
+
+        // Generate the sample attendance data
+        DATABASE.generateSampleAttendance();
+
+        // Store user data in session storage for simulating persistence between pages
+        function storeUserData(userData) {
+            sessionStorage.setItem('currentUser', JSON.stringify(userData));
+        }
+
+        // Toggle between Student and Teacher login
+        const studentBtn = document.getElementById('studentBtn');
+        const teacherBtn = document.getElementById('teacherBtn');
+        const usernamePlaceholder = document.getElementById('username');
+
+        studentBtn.addEventListener('click', () => {
+            studentBtn.classList.add('active');
+            teacherBtn.classList.remove('active');
+            usernamePlaceholder.placeholder = 'Username / Registration No';
+        });
+
+        teacherBtn.addEventListener('click', () => {
+            teacherBtn.classList.add('active');
+            studentBtn.classList.remove('active');
+            usernamePlaceholder.placeholder = 'Teacher Username';
+        });
+
+        // Notification functions
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification ' + type; // 'success' or 'error'
+            notification.style.display = 'block';
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Form submission
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const isTeacher = teacherBtn.classList.contains('active');
+
+            if (!username || !password) {
+                showNotification('Please enter both username and password', 'error');
+                return;
+            }
+
+            // Authentication logic
+            if (isTeacher) {
+                // Check teacher credentials
+                if (username === DATABASE.users.teacher.username && 
+                    password === DATABASE.users.teacher.password) {
+                    // Store teacher data
+                    storeUserData({
+                        name: DATABASE.users.teacher.name,
+                        role: 'teacher'
+                    });
+                    
+                    showNotification('Teacher login successful. Redirecting...', 'success');
+                    
+                    // Redirect after a short delay to show the success message
+                    setTimeout(() => {
+                        window.location.href = 'interface.html';
+                    }, 1000);
+                } else {
+                    showNotification('Invalid teacher credentials', 'error');
+                }
+            } else {
+                // Check student credentials
+                const student = DATABASE.users.students.find(s => 
+                    s.username === username || s.rollNo === username
+                );
+                
+                if (student && student.password === password) {
+                    // Store student data
+                    storeUserData({
+                        id: student.id,
+                        name: student.name,
+                        rollNo: student.rollNo,
+                        role: 'student'
+                    });
+                    
+                    showNotification('Student login successful. Redirecting...', 'success');
+                    
+                    // Redirect after a short delay to show the success message
+                    setTimeout(() => {
+                        window.location.href = 'interface.html';
+                    }, 1000);
+                } else {
+                    showNotification('Invalid student credentials', 'error');
+                }
+            }
+        });
+
+        // Forgot password
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        forgotPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const isTeacher = teacherBtn.classList.contains('active');
+            if (isTeacher) {
+                showNotification('Please contact the administrator to reset your password.', 'info');
+            } else {
+                const username = document.getElementById('username').value.trim();
+                if (!username) {
+                    showNotification('Please enter your username first', 'error');
+                    return;
+                }
+                
+                const student = DATABASE.users.students.find(s => 
+                    s.username === username || s.rollNo === username
+                );
+                
+                if (student) {
+                    showNotification(`Password hint: ${student.password}. For security, please change after login.`, 'success');
+                } else {
+                    showNotification('Username not found. Please contact your administrator.', 'error');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
